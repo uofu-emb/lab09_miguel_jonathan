@@ -1,0 +1,43 @@
+\documentclass{minimal}
+
+\usepackage{amsmath}
+\usepackage{minted}
+
+\begin{document}
+
+\begin{alignat*}{2}
+	States &= (&&\{north, south\}\rightarrow\{present, absent\},\,alarm\rightarrow\{on, off\},\,barrier\rightarrow\{raised, lowered\}) \\
+	Inputs &= (&&\{northbound\_approach, southbound\_approach, \\
+	&&&northbound\_depart, southbound\_depart, elapsed\}\rightarrow\{present, absent\}) \\
+	Outputs &= (&&reset\_timer\rightarrow\{present, absent\}) \\
+	initialState &= (&&absent, absent, off, raised)
+\end{alignat*}
+
+\begin{minted}{Python}
+def update(s, i):
+    out = None
+    if i.northbound_approach:
+        if not (s.south or s.north):
+            out = True # reset timer
+        s.north = True
+    elif i.northbound_depart:
+        s.north = None
+    if i.southbound_approach:
+        if not (s.south or s.north):
+            out = True # reset timer
+        s.south = True
+    elif i.southbound_depart:
+        s.south = None
+    if s.north or s.south:
+        s.alarm = True # on
+        if i.elapsed:
+            s.barrier = True # lowered
+    elif s.barrier:
+        s.barrier = False # raised
+        out = True # reset timer
+    elif i.elapsed:
+        s.alarm = False # off
+    return s, out
+\end{minted}
+
+\end{document}
