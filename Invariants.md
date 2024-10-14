@@ -21,3 +21,14 @@
 **Barriers**
 
  - Barriers should always be down when trains are present, and up otherwise.
+
+**Counter-example Sequence**
+
+ - Start idle
+ - Receive nb_approach
+ - Receive elapsed
+ - Receive nb_depart
+ - Receive sb_approach
+ - Receive elapsed
+
+Results in idle state (barrier up) with a train coming
