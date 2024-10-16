@@ -32,8 +32,27 @@ def update(s, i):
 
 headers = ('number', 'arms_down', 'alarm_on', 'northbound_present', 'southbound_present',
            'north_approach', 'south_approach', 'north_depart', 'south_depart', 'elapsed', 'safety_hazard')
+
+
 hazards = ['']+[25]*3+['']*12 # TODO finish
-bad_events = {(0, 2): 19, (0, 3): 19, (0, 4): 24} # TODO finish
+
+hazards[8] = 27
+hazards[9:12] = [25]*3
+hazards[12] = 27
+
+
+# (state, event): Invariant 
+
+bad_events = {(0, 2): 19, (0, 3): 19, (0, 4): 24,
+              (4, 2): 19, (4, 3): 19,
+              (5, 1): 20, (5, 2): 27, (5, 3): 27,
+              (6, 0): 20, (6, 2): 27, (6, 3): 27,
+              (7, 0): 20, (7, 1): 20, (7, 2): 27, (7, 3): 27,
+              (13, 1): 20, (13, 2): 19, (13, 4): 24,
+              (14, 0): 20, (14, 3): 19, (14, 4): 24,
+              (15, 0): 20, (15, 1): 20, (15, 4): 24 } # TODO finish
+
+
 
 def rowstr(entries, fill=' '):
     return f'|{fill}' + f'{fill}|{fill}'.join(str(e).ljust(len(headers[i]), fill) for i, e in enumerate(entries)) + f'{fill}|'
