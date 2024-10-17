@@ -93,28 +93,39 @@ How would you go about proving that your model is correct?
    1. If an event violates an invariant (e.g. event not allowed in that state), write down the number of the invariant.
    1. If an event has no effect, you can stay in the same state.
 
-| number | arms_down | alarm_on | northbound_present | southbound_present | north_approach | south_approach | north_depart | south_depart | ringing | safety_hazard |
+| number | arms_down | alarm_on | northbound_present | southbound_present | north_approach | south_approach | north_depart | south_depart | elapsed | safety_hazard |
 |--------|-----------|----------|--------------------|--------------------|----------------|----------------|--------------|--------------|---------|---------------|
-| 0      | 0         | 0        | 0                  | 0                  |                |                |              |              |         |               |
-| 1      | 0         | 0        | 0                  | 1                  |                |                |              |              |         |               |
-| 2      | 0         | 0        | 1                  | 0                  |                |                |              |              |         |               |
-| 3      | 0         | 0        | 1                  | 1                  |                |                |              |              |         |               |
-| 4      | 0         | 1        | 0                  | 0                  |                |                |              |              |         |               |
-| 5      | 0         | 1        | 0                  | 1                  |                |                |              |              |         |               |
-| 6      | 0         | 1        | 1                  | 0                  |                |                |              |              |         |               |
-| 7      | 0         | 1        | 1                  | 1                  |                |                |              |              |         |               |
-| 8      | 1         | 0        | 0                  | 0                  |                |                |              |              |         |               |
-| 9      | 1         | 0        | 0                  | 1                  |                |                |              |              |         |               |
-| 10     | 1         | 0        | 1                  | 0                  |                |                |              |              |         |               |
-| 11     | 1         | 0        | 1                  | 1                  |                |                |              |              |         |               |
-| 12     | 1         | 1        | 0                  | 0                  |                |                |              |              |         |               |
-| 13     | 1         | 1        | 0                  | 1                  |                |                |              |              |         |               |
-| 14     | 1         | 1        | 1                  | 0                  |                |                |              |              |         |               |
-| 15     | 1         | 1        | 1                  | 1                  |                |                |              |              |         |               |
+| 0      | 0         | 0        | 0                  | 0                  | 6              | 5              | 19           | 19           | 24      |               |
+| 1      | 0         | 0        | 0                  | 1                  | 7              | 5              | 5            | 0            | 13      | 25            |
+| 2      | 0         | 0        | 1                  | 0                  | 6              | 7              | 0            | 6            | 14      | 25            |
+| 3      | 0         | 0        | 1                  | 1                  | 7              | 7              | 5            | 6            | 15      | 25            |
+| 4      | 0         | 1        | 0                  | 0                  | 6              | 5              | 19           | 19           | 0       |               |
+| 5      | 0         | 1        | 0                  | 1                  | 7              | 20             | 27           | 27           | 13      |               |
+| 6      | 0         | 1        | 1                  | 0                  | 20             | 7              | 27           | 27           | 14      |               |
+| 7      | 0         | 1        | 1                  | 1                  | 20             | 20             | 27           | 27           | 15      |               |
+| 8      | 1         | 0        | 0                  | 0                  | 14             | 13             | 0            | 0            | 0       | 27            |
+| 9      | 1         | 0        | 0                  | 1                  | 15             | 13             | 13           | 0            | 13      | 25            |
+| 10     | 1         | 0        | 1                  | 0                  | 14             | 15             | 0            | 14           | 14      | 25            |
+| 11     | 1         | 0        | 1                  | 1                  | 15             | 15             | 13           | 14           | 15      | 25            |
+| 12     | 1         | 1        | 0                  | 0                  | 14             | 13             | 4            | 4            | 4       | 27            |
+| 13     | 1         | 1        | 0                  | 1                  | 15             | 20             | 19           | 4            | 24      |               |
+| 14     | 1         | 1        | 1                  | 0                  | 20             | 15             | 4            | 19           | 24      |               |
+| 15     | 1         | 1        | 1                  | 1                  | 20             | 20             | 13           | 14           | 24      |               |
 
-| number | invariant |
-|--------|-----------|
-| 16     |           |
+**Invariants**
+
+16. The system will always have power during operation.
+1. Trains on each side run only in one direction.
+1. Signals are given correctly when trains pass the sensors, and only then.
+1. Each depart signal should be preceeded by the appropriate approach signal, and vice-versa.
+1. The appropriate depart signal will be given before receiving another approach signal for the same side of the track.
+1. The approach signal will be given at least 10 seconds before the train reaches the crossing.
+1. An elapsed signal will be received 10 seconds after the timer is reset.
+1. Only one elapsed signal will be received if the timer is reset before receiving the signal.
+1. An elapsed signal will be received only when the timer is reset, and only once per reset.
+1. The alarm will be on when trains are present.
+1. The alarm will remain on while barriers are being raised.
+1. Barriers should always be down when trains are present, and up otherwise.
 
 ## Specification vs. implementation
 1. Start drawing an FSM using the table you just made.
