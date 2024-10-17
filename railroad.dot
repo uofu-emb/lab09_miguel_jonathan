@@ -1,40 +1,40 @@
 digraph {
 	s0[label="Idle (0)"];
-	{rank=same;
+	{//rank=same;
 	s6[label="Approaching north (6)"];
 	s7[label="Approaching trains (7)"];
 	s5[label="Approaching south (5)"];
 	}
-	{rank=same;
+	{//rank=same;
 	s14[label="Lowered (14)"];
 	s15[label="Lowered (15)"];
 	s13[label="Lowered (13)"];
 	}
 	s4[label="Departure (4)"];
 
-	s0 -> s6 [label="north_approach / alarm_on=1, northbound_present=1, reset_timer"];
-	//s0 -> s7 [label="north_approach and south_approach / alarm_on=1, northbound_present=1, southbound_present=1, reset_timer"];
-	s0 -> s5 [label="south_approach / alarm_on=1, southbound_present=1, reset_timer"];
+	s0 -> s6 [label="north_approach / reset_timer"];
+	//s0 -> s7 [label="north_approach and south_approach / reset_timer"];
+	s0 -> s5 [label="south_approach / reset_timer"];
 
-	s6 -> s7 [label="south_approach / southbound_present=1"];
-	s5 -> s7 [label="north_approach / northbound_present=1"];
+	s6 -> s7 [label="south_approach"];
+	s5 -> s7 [label="north_approach"];
 
-	s6 -> s14 [label="elapsed / arms_down=1"];
-	s7 -> s15 [label="elapsed / arms_down=1"];
-	s5 -> s13 [label="elapsed / arms_down=1"];
+	s6 -> s14 [label="elapsed"];
+	s7 -> s15 [label="elapsed"];
+	s5 -> s13 [label="elapsed"];
 
-	s14 -> s15 [label="south_approach / southbound_present=1"];
-	s13 -> s15 [label="north_approach / northbound_present=1"];
+	s14 -> s15 [label="south_approach"];
+	s13 -> s15 [label="north_approach"];
 
-	s14 -> s4 [label="north_depart / arms_down=0, northbound_present=0, reset_timer"];
-	//s15 -> s4 [label="north_depart and south_depart / arms_down=0, northbound_present=0, southbound_present=0, reset_timer"];
-	s13 -> s4 [label="south_depart / arms_down=0, southbound_present=0, reset_timer"];
+	s14 -> s4 [label="north_depart / reset_timer"];
+	//s15 -> s4 [label="north_depart and south_depart / reset_timer"];
+	s13 -> s4 [label="south_depart / reset_timer"];
 
-	s15 -> s13 [label="north_depart / northbound_present=0"];
-	s15 -> s14 [label="south_depart / southbound_present=0"];
+	s15 -> s13 [label="north_depart"];
+	s15 -> s14 [label="south_depart"];
 
-	s4 -> s0 [label="elapsed / alarm_on=0"]
-	s4 -> s6 [label="north_approach / northbound_present=1, reset_timer"];
-	//s4 -> s7 [label="north_approach and south_approach / northbound_present=1, southbound_present=1, reset_timer"];
-	s4 -> s5 [label="south_approach / southbound_present=1, reset_timer"];
+	s4 -> s0 [label="elapsed"]
+	s4 -> s6 [label="north_approach / reset_timer"];
+	//s4 -> s7 [label="north_approach and south_approach / reset_timer"];
+	s4 -> s5 [label="south_approach / reset_timer"];
 }
