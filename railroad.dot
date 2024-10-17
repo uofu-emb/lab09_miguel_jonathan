@@ -1,0 +1,35 @@
+digraph {
+	base[label="No trains"];
+	{rank=same;
+	approachn[label="Approaching north"];
+	approach2[label="Approaching trains"];
+	approachs[label="Approaching south"];
+	}
+	{rank=same;
+	loweredn[label="Lowered"];
+	lowered2[label="Lowered"];
+	lowereds[label="Lowered"];
+	}
+	departure[label="Departure"];
+
+	base -> approachn [label="northbound_approach / nap=True, alarm on, start timer"];
+	base -> approach2 [label="northbound_approach and southbound_approach / nap=True, sap=True, alarm on, start timer"];
+	base -> approachs [label="southbound_approach / sap=True, alarm on, start timer"];
+	approachn -> approach2 [label="southbound_approach / sap=True"];
+	approachs -> approach2 [label="northbound_approach / nap=True"];
+
+	approachn -> loweredn [label="elapsed / barrier lowered"];
+	approach2 -> lowered2 [label="elapsed / barrier lowered"];
+	approachs -> lowereds [label="elapsed / barrier lowered"];
+	loweredn -> lowered2 [label="southbound_approach / sap=True"];
+	lowereds -> lowered2 [label="northbound_approach / nap=True"];
+
+	loweredn -> departure [label="northbound_depart / nap=False, barrier raised, start timer"];
+	lowered2 -> departure [label="northbound_depart and southbound_depart / nap=False, sap=False, barrier raised, start timer"];
+	lowereds -> departure [label="southbound_depart / sap=False, barrier raised, start timer"];
+
+	departure -> base [label="elapsed / alarm off"]
+	departure -> approachn [label="northbound_approach / nap=True, restart timer"];
+	departure -> approach2 [label="northbound_approach and southbound_approach / nap=True, sap=True, restart timer"];
+	departure -> approachs [label="southbound_approach / sap=True, restart timer"];	
+}
